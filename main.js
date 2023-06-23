@@ -24,7 +24,7 @@ var constraints = {
         // height: { ideal: 3508 },
         width: { ideal: 1240 },
         height: { ideal: 1754 },
-        facingMode: { exact: "user" },
+        facingMode: { exact: "environment" },
     },
     audio: false,
 };
@@ -50,6 +50,7 @@ video.addEventListener("loadedmetadata", function () {
 
     // Start rendering frames
     setInterval(renderFrame, 10);
+    
 });
 
 function renderFrame() {
@@ -68,6 +69,7 @@ import { jsPDF } from "jspdf";
 const doc = new jsPDF();
 
 function savePDF() {
+    
     // fills the image to the entire page
     const extracted = scanner.extractPaper(canvas, 2480, 3508);
 
