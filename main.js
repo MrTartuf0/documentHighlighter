@@ -22,8 +22,8 @@ var constraints = {
     video: {
         // width: { ideal: 2480 },
         // height: { ideal: 3508 },
-        width: { ideal: 1240 },
-        height: { ideal: 1754 },
+        // width: { ideal: 1240 },
+        // height: { ideal: 1754 },
         facingMode: { exact: "environment" },
     },
     audio: false,
@@ -50,7 +50,6 @@ video.addEventListener("loadedmetadata", function () {
 
     // Start rendering frames
     setInterval(renderFrame, 10);
-    
 });
 
 function renderFrame() {
@@ -69,12 +68,11 @@ import { jsPDF } from "jspdf";
 const doc = new jsPDF();
 
 function savePDF() {
-    
     // fills the image to the entire page
     const extracted = scanner.extractPaper(canvas, 2480, 3508);
 
     doc.addImage(extracted, "PNG", 0, 0, doc.internal.pageSize.getWidth(), 0);
-    doc.addPage();
+    // doc.addPage();
     doc.save("saved.pdf");
 }
 
@@ -84,7 +82,7 @@ document.getElementById("myButton").addEventListener("click", savePDF);
 // // import sharp from "sharp";
 // // import { jsPDF } from "jspdf";
 // // import { loadImage } from "canvas";
-// // import { writeFileSync } from "fs";j
+// // import { writeFileSync } from "fs";
 
 // const INPUT_PHOTO_PATH = "img/photo.jpg";
 // const EXTRACTED_IMAGE_PATH = "img/extracted.jpg";
@@ -117,30 +115,4 @@ document.getElementById("myButton").addEventListener("click", savePDF);
 //       });
 
 //   });
-// });
-
-// const scanner = new jscanify();
-// const canvasCtx = canvas.getContext("2d");
-// const resultCtx = result.getContext("2d");
-// navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-//     video.srcObject = stream;
-//     video.onloadedmetadata = () => {
-//         video.play();
-
-//         setInterval(() => {
-//             canvasCtx.drawImage(video, 0, 0);
-//             const resultCanvas = scanner.highlightPaper(canvas);
-//             resultCtx.drawImage(resultCanvas, 0, 0);
-//         }, 10);
-//     };
-// });
-
-// // When the video metadata is loaded, update canvas size and start rendering
-// video.addEventListener("loadedmetadata", function () {
-//     // Set the canvas dimensions to match the video
-//     canvas.width = video.videoWidth;
-//     canvas.height = video.videoHeight;
-
-//     // Start rendering frames
-//     renderFrame();
 // });
