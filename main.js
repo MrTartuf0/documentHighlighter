@@ -22,7 +22,7 @@ var constraints = {
     video: {
         // width: { ideal: 2480 },
         // height: { ideal: 3508 },
-        // width: { ideal: 1240 },
+        width: { ideal: 1240 },
         // height: { ideal: 1754 },
         facingMode: { exact: "environment" },
     },
