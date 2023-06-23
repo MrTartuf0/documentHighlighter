@@ -6,8 +6,7 @@ video.setAttribute("autoplay", "");
 video.setAttribute("muted", "");
 video.setAttribute("playsinline", "");
 
-
-// improve performance with willReadFrequently: true, 
+// improve performance with willReadFrequently: true,
 const canvas = document.getElementById("canvasElement");
 const canvasCtx = canvas.getContext("2d", {
     willReadFrequently: true,
@@ -19,18 +18,17 @@ const highlightCtx = highlightCanvas.getContext("2d", {
 
 const scanner = new jscanify();
 
-var constraints = { 
+var constraints = {
     video: {
-        width: { ideal: 4096 },
-        height: { ideal: 2160 },
-        facingMode: { exact: "environment" }
-    } 
+        width: { ideal: 2480 },
+        height: { ideal: 3508 },
+        facingMode: { exact: "environment" },
+    },
 };
-
 
 // Request access to the camera
 navigator.mediaDevices
-    .getUserMedia( constraints )
+    .getUserMedia(constraints)
     .then(function (stream) {
         // Set the video source as the camera stream
         video.srcObject = stream;
@@ -61,17 +59,18 @@ function renderFrame() {
     highlightCtx.drawImage(resultCanvas, 0, 0);
 }
 
-
 // EXPORT THE IMAGE TAKEN FROM THE CANVAS TO PDF
-import { jsPDF } from "jspdf"
+import { jsPDF } from "jspdf";
 
-const doc = new jsPDF()
+const doc = new jsPDF();
 
-function savePDF(){
-// fills the image to the entire page 
-doc.addImage(canvas.toDataURL() , 'PNG' , 0 , 0 , doc.internal.pageSize.getWidth() , 0)
-doc.addPage()
-  doc.save("saved.pdf")
+function savePDF() {
+    // fills the image to the entire page
+    const extracted = scanner.extractPaper(canvas, 2480 , 3508);
+
+    doc.addImage(extracted,"PNG",0,0,doc.internal.pageSize.getWidth(),0);
+    doc.addPage();
+    doc.save("saved.pdf");
 }
 
 document.getElementById("myButton").addEventListener("click", savePDF);
