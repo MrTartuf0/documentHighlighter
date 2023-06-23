@@ -33,7 +33,7 @@
 
             // Request access to the camera
             navigator.mediaDevices
-                .getUserMedia({ video: true })
+                .getUserMedia({ video: {facingMode: {exact: 'enviroment'}} })
                 .then(function (stream) {
                     // Set the video source as the camera stream
                     video.srcObject = stream;

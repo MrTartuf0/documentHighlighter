@@ -7,3 +7,8 @@
   display: block;
   margin: 0 auto;
 }
+
+
+#highlightCanvas{
+  width: 50vw;
+}
