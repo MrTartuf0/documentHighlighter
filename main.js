@@ -69,7 +69,7 @@ const doc = new jsPDF();
 
 function savePDF() {
     // fills the image to the entire page
-    const extracted = scanner.extractPaper(canvas, 2480, 3508);
+    const extracted = scanner.extractPaper(canvas, 2480/2, 3508/2);
 
     doc.addImage(extracted, "PNG", 0, 0, doc.internal.pageSize.getWidth(), 0);
     // doc.addPage();
