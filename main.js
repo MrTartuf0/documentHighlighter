@@ -19,9 +19,18 @@ const highlightCtx = highlightCanvas.getContext("2d", {
 
 const scanner = new jscanify();
 
+var constraints = { 
+    video: {
+        width: { ideal: 4096 },
+        height: { ideal: 2160 },
+        facingMode: { exact: "environment" }
+    } 
+};
+
+
 // Request access to the camera
 navigator.mediaDevices
-    .getUserMedia({ video: { facingMode: { exact: "environment" } } })
+    .getUserMedia( constraints )
     .then(function (stream) {
         // Set the video source as the camera stream
         video.srcObject = stream;

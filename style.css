@@ -12,3 +12,16 @@
 #highlightCanvas{
   width: 100vw;
 }
+
+
+#myButton{
+  background-color: black;
+  padding: 12px 24px;
+  border-radius: 100vw;
+  color: white;
+  font-size: 24px;
+}
+
+#myButton:hover{
+  cursor: pointer;
+}
