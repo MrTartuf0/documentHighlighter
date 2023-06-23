@@ -1,15 +1,71 @@
-// import { jsPDF } from "jspdf"
+// Get video and canvas elements
+const video = document.getElementById("videoElement");
+video.style.width = document.width + "px";
+video.style.height = document.height + "px";
+video.setAttribute("autoplay", "");
+video.setAttribute("muted", "");
+video.setAttribute("playsinline", "");
 
-// const doc = new jsPDF()
 
-// doc.addImage('img/output.png' , 'PNG' , 0 , 0 , doc.internal.pageSize.getWidth() , 0)
-// doc.addPage()
+// improve performance with willReadFrequently: true, 
+const canvas = document.getElementById("canvasElement");
+const canvasCtx = canvas.getContext("2d", {
+    willReadFrequently: true,
+});
+const highlightCanvas = document.getElementById("highlightCanvas");
+const highlightCtx = highlightCanvas.getContext("2d", {
+    willReadFrequently: true,
+});
 
-// function savePDF(){
-//   doc.save("saved.pdf")
-// }
+const scanner = new jscanify();
 
-// document.getElementById("myButton").addEventListener("click", savePDF);
+// Request access to the camera
+navigator.mediaDevices
+    .getUserMedia({ video: { facingMode: { exact: "environment" } } })
+    .then(function (stream) {
+        // Set the video source as the camera stream
+        video.srcObject = stream;
+    })
+    .catch(function (error) {
+        console.error("Error accessing the camera:", error);
+    });
+
+// When the video metadata is loaded, update canvas size and start rendering
+video.addEventListener("loadedmetadata", function () {
+    // Set the canvas dimensions to match the video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    highlightCanvas.width = video.videoWidth;
+    highlightCanvas.height = video.videoHeight;
+
+    // Start rendering frames
+    setInterval(renderFrame, 10);
+});
+
+function renderFrame() {
+    // Draw the current video frame onto the canvas
+    canvasCtx.drawImage(video, 0, 0);
+
+    // Apply jscanify effect and highlight the document
+    const resultCanvas = scanner.highlightPaper(canvas);
+    highlightCtx.clearRect(0, 0, highlightCanvas.width, highlightCanvas.height);
+    highlightCtx.drawImage(resultCanvas, 0, 0);
+}
+
+
+// EXPORT THE IMAGE TAKEN FROM THE CANVAS TO PDF
+import { jsPDF } from "jspdf"
+
+const doc = new jsPDF()
+
+function savePDF(){
+// fills the image to the entire page 
+doc.addImage(canvas.toDataURL() , 'PNG' , 0 , 0 , doc.internal.pageSize.getWidth() , 0)
+doc.addPage()
+  doc.save("saved.pdf")
+}
+
+document.getElementById("myButton").addEventListener("click", savePDF);
 
 // // import jscanify from "jscanify";
 // // import sharp from "sharp";
@@ -50,28 +106,28 @@
 //   });
 // });
 
-const scanner = new jscanify();
-const canvasCtx = canvas.getContext("2d");
-const resultCtx = result.getContext("2d");
-navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-    video.srcObject = stream;
-    video.onloadedmetadata = () => {
-        video.play();
+// const scanner = new jscanify();
+// const canvasCtx = canvas.getContext("2d");
+// const resultCtx = result.getContext("2d");
+// navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+//     video.srcObject = stream;
+//     video.onloadedmetadata = () => {
+//         video.play();
 
-        setInterval(() => {
-            canvasCtx.drawImage(video, 0, 0);
-            const resultCanvas = scanner.highlightPaper(canvas);
-            resultCtx.drawImage(resultCanvas, 0, 0);
-        }, 10);
-    };
-});
+//         setInterval(() => {
+//             canvasCtx.drawImage(video, 0, 0);
+//             const resultCanvas = scanner.highlightPaper(canvas);
+//             resultCtx.drawImage(resultCanvas, 0, 0);
+//         }, 10);
+//     };
+// });
 
-// When the video metadata is loaded, update canvas size and start rendering
-video.addEventListener("loadedmetadata", function () {
-    // Set the canvas dimensions to match the video
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    
-    // Start rendering frames
-    renderFrame();
-});
+// // When the video metadata is loaded, update canvas size and start rendering
+// video.addEventListener("loadedmetadata", function () {
+//     // Set the canvas dimensions to match the video
+//     canvas.width = video.videoWidth;
+//     canvas.height = video.videoHeight;
+
+//     // Start rendering frames
+//     renderFrame();
+// });

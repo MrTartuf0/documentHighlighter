@@ -2,72 +2,17 @@
 <html>
     <head>
         <title>Camera Stream with jscanify</title>
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <video id="videoElement" autoplay style="display: none"></video>
         <canvas id="canvasElement" style="display: none"></canvas>
         <canvas id="highlightCanvas"></canvas>
-        <link rel="stylesheet" href="style.css" />
+
+        <button id="myButton">Scan Document</button>
 
         <script src="https://docs.opencv.org/4.7.0/opencv.js" async></script>
         <script src="https://cdn.jsdelivr.net/gh/ColonelParrot/jscanify@master/src/jscanify.min.js"></script>
-        <script>
-            // Get video and canvas elements
-            const video = document.getElementById("videoElement");
-            video.style.width = document.width + "px";
-            video.style.height = document.height + "px";
-            video.setAttribute("autoplay", "");
-            video.setAttribute("muted", "");
-            video.setAttribute("playsinline", "");
-
-            const canvas = document.getElementById("canvasElement");
-            const canvasCtx = canvas.getContext("2d", {
-                willReadFrequently: true,
-            });
-            const highlightCanvas = document.getElementById("highlightCanvas");
-            const highlightCtx = highlightCanvas.getContext("2d", {
-                willReadFrequently: true,
-            });
-
-            const scanner = new jscanify();
-
-            // Request access to the camera
-            navigator.mediaDevices
-                .getUserMedia({ video: {facingMode: {exact: 'environment'}} })
-                .then(function (stream) {
-                    // Set the video source as the camera stream
-                    video.srcObject = stream;
-                })
-                .catch(function (error) {
-                    console.error("Error accessing the camera:", error);
-                });
-
-            // When the video metadata is loaded, update canvas size and start rendering
-            video.addEventListener("loadedmetadata", function () {
-                // Set the canvas dimensions to match the video
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                highlightCanvas.width = video.videoWidth;
-                highlightCanvas.height = video.videoHeight;
-
-                // Start rendering frames
-                setInterval(renderFrame, 10);
-            });
-
-            function renderFrame() {
-                // Draw the current video frame onto the canvas
-                canvasCtx.drawImage(video, 0, 0);
-
-                // Apply jscanify effect and highlight the document
-                const resultCanvas = scanner.highlightPaper(canvas);
-                highlightCtx.clearRect(
-                    0,
-                    0,
-                    highlightCanvas.width,
-                    highlightCanvas.height
-                );
-                highlightCtx.drawImage(resultCanvas, 0, 0);
-            }
-        </script>
+        <script src="main.js" type="module"></script>
     </body>
 </html>
