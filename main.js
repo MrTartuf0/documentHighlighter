@@ -20,10 +20,13 @@ const scanner = new jscanify();
 
 var constraints = {
     video: {
-        width: { ideal: 2480 },
-        height: { ideal: 3508 },
-        facingMode: { exact: "environment" },
+        // width: { ideal: 2480 },
+        // height: { ideal: 3508 },
+        width: { ideal: 1240 },
+        height: { ideal: 1754 },
+        facingMode: { exact: "user" },
     },
+    audio: false,
 };
 
 // Request access to the camera
@@ -66,9 +69,9 @@ const doc = new jsPDF();
 
 function savePDF() {
     // fills the image to the entire page
-    const extracted = scanner.extractPaper(canvas, 2480 , 3508);
+    const extracted = scanner.extractPaper(canvas, 2480, 3508);
 
-    doc.addImage(extracted,"PNG",0,0,doc.internal.pageSize.getWidth(),0);
+    doc.addImage(extracted, "PNG", 0, 0, doc.internal.pageSize.getWidth(), 0);
     doc.addPage();
     doc.save("saved.pdf");
 }
